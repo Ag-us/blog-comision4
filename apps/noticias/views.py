@@ -24,11 +24,11 @@ class Registro(View):
     template_name = 'noticias/registro.html'
 
     def get(self, request):
-        form = RegistroForm()  # Utiliza tu formulario personalizado
+        form = RegistroForm() 
         return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        form = RegistroForm(request.POST)  # Utiliza tu formulario personalizado
+        form = RegistroForm(request.POST) 
         if form.is_valid():
             form.save()
             return redirect('login')
@@ -57,7 +57,6 @@ class Login(View):
 
 
 
-# uso de decorador para verificar logeo de usuario y poder ver noticia
 @login_required
 def inicio(request):
     contexto = {}
@@ -116,28 +115,11 @@ def borrar_noticia(request, pk):
     
     if request.method == 'POST':
         noticia.delete()
-        return redirect('noticias:inicio')  # Redirige a la página de inicio después de borrar la noticia
+        return redirect('noticias:inicio')  
 
     return render(request, 'noticias/borrar.html', {'noticia': noticia})
 
 
-
-
-#Formulario de Registro de noticas
-# @login_required
-# def registrar_noticia(request):
-#     data = {
-#         'form': NoticiaForm()
-#     }
-#     if request.method == 'POST':
-#         formulario = NoticiaForm(data=request.POST)
-#         if formulario.is_valid():
-#             formulario.save()
-#             return redirect('home')
-#     else:
-#         formulario = NoticiaForm()
-        
-#     return render(request, 'noticias/registrar_noticia.html', data)
 
 class CrearNoticia(LoginRequiredMixin, CreateView):
 	model = Noticia
@@ -150,25 +132,18 @@ class CrearNoticia(LoginRequiredMixin, CreateView):
 		noticia.autor = self.request.user
 		return super(CrearNoticia, self).form_valid(form)
 
-# ClaseName.objects.all()[0:2]              select * from noticias
-# ClaseName.objects.get(pk = 1)        select * from noticias where id = 1
-# ClaseName.objects.filter(categoria)  select * from noticias where categoria = deportes
 
 
 
-class Contact(View):
+class Contact(CreateView):
+    model = Contacto
+    form_class = ContactoForm
     template_name = 'contacto/formulario.html'
-
-    def get(self, request):
-        form = ContactoForm()  # Utiliza tu formulario personalizado
-        return render(request, self.template_name, {'form': form}) 
-
-    def post(self, request):
-        form = ContactoForm(request.POST)  # Utiliza tu formulario personalizado
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-        return render(request, self.template_name, {'form': form}) 
+    success_url = reverse_lazy('noticias:registrar_noticia')
+    
+    def form_valid(self, form):
+        contacto = form.save(commit=False)
+        return super(Contact, self).form_valid(form)
 
 
 @login_required

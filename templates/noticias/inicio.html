@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="{% static 'css/noticias_inicio.css' %}">
 {% endblock stylesheet %}
 
+<!-- Insertar Titulo -->
+{% block titulo%} Noticias {% endblock titulo %}
 
 {% block contenido%}
 <h2 class="text-center">Todas las noticias</h2>
@@ -43,7 +45,7 @@
     </div>
 </div>
 
-<div class="row mt-4">
+<div class="row mt-4 noticias-container">
     {% for noticia in noticias %}
     <div class="col-md-4 mb-4">
         <div class="card">
@@ -59,10 +61,4 @@
     </div>
     {% endfor %}
 </div>
-
-<<<<<<< HEAD
 {% endblock contenido%}
-=======
-{% endblock contenido%}
-
->>>>>>> 980739b2e58efa0158d29550ba11952ba466d687
